@@ -1,0 +1,100 @@
+# pro3
+this is a pro3
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Platform</title>
+    <style>
+        /* Inline CSS for simplicity, consider using an external stylesheet for a real project */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .music-player {
+            text-align: center;
+            margin: 20px;
+        }
+        #play-button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        #playlist {
+            list-style-type: none;
+            padding: 0;
+        }
+        #playlist li {
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="music-player">
+        <h1>My Music Platform</h1>
+        <audio id="audio-player">
+            <source src="sample.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <button id="play-button">Play</button>
+        <ul id="playlist">
+            <li data-src="song1.mp3">Song 1</li>
+            <li data-src="song2.mp3">Song 2</li>
+            <li data-src="song3.mp3">Song 3</li>
+        </ul>
+    </div>
+
+    <script>
+        // JavaScript for handling the music player functionality
+        const audioPlayer = document.getElementById('audio-player');
+        const playButton = document.getElementById('play-button');
+        const playlist = document.getElementById('playlist');
+        const playlistItems = playlist.getElementsByTagName('li');
+
+        let currentSong = 0;
+
+        playButton.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playButton.textContent = 'Pause';
+            } else {
+                audioPlayer.pause();
+                playButton.textContent = 'Play';
+            }
+        });
+
+        playlistItems[currentSong].classList.add('active');
+
+        playlistItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentSong = index;
+                playSong();
+            });
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            currentSong++;
+            if (currentSong >= playlistItems.length) {
+                currentSong = 0;
+            }
+            playSong();
+        });
+
+        function playSong() {
+            audioPlayer.src = playlistItems[currentSong].getAttribute('data-src');
+            audioPlayer.load();
+            audioPlayer.play();
+            playButton.textContent = 'Pause';
+
+            // Highlight the currently playing song
+            for (const item of playlistItems) {
+                item.classList.remove('active');
+            }
+            playlistItems[currentSong].classList.add('active');
+        }
+    </script>
+</body>
+</html>
